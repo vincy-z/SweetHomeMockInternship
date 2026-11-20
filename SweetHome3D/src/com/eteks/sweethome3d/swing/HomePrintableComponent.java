@@ -502,6 +502,10 @@ public class HomePrintableComponent extends JComponent implements Printable {
                              Printable planView,
                              int planPage) throws PrinterException {
 
+    if (planView instanceof PlanComponent) {
+      return planView.print(g2D, pageFormat, planPage);
+    }
+
     List<Level> levels = new ArrayList<Level>();
 
     for (Level level : this.home.getLevels()) {
@@ -526,4 +530,5 @@ public class HomePrintableComponent extends JComponent implements Printable {
       this.home.setSelectedItems(previousSelection);
     }
   }
+
 }
