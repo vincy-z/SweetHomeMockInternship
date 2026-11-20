@@ -53,7 +53,7 @@ public class HomeFurnitureController implements Controller {
    * The properties that may be edited by the view associated to this controller. 
    */
   public enum Property {ICON, NAME, NAME_VISIBLE, DESCRIPTION, PRICE, X, Y, ELEVATION, ANGLE_IN_DEGREES, BASE_PLAN_ITEM, 
-      WIDTH, DEPTH,  HEIGHT, PROPORTIONAL, COLOR, PAINT, SHININESS, VISIBLE, MODEL_MIRRORED, LIGHT_POWER, 
+      WIDTH, DEPTH, HEIGHT, VOLUME, PROPORTIONAL, COLOR, PAINT, SHININESS, VISIBLE, MODEL_MIRRORED, LIGHT_POWER,
       RESIZABLE, DEFORMABLE, TEXTURABLE}
   
   /**
@@ -953,7 +953,16 @@ public class HomeFurnitureController implements Controller {
   public Float getHeight() {
     return this.height;
   }
-  
+
+  /**
+   * Returns the edited volume.
+   */
+  public Float getVolume(){
+    if (this.getWidth() != null && this.getHeight() != null && this.getDepth() != null)
+      return this.getWidth() * this.getHeight() * this.getDepth();
+    return null;
+  }
+
   /**
    * Sets whether furniture proportions should be kept.
    */
