@@ -497,38 +497,12 @@ public class HomePrintableComponent extends JComponent implements Printable {
   }
 
 
+
   private int printPlanPages(Graphics2D g2D,
                              PageFormat pageFormat,
                              Printable planView,
                              int planPage) throws PrinterException {
 
-    if (planView instanceof PlanComponent) {
-      return planView.print(g2D, pageFormat, planPage);
-    }
-
-    List<Level> levels = new ArrayList<Level>();
-
-    for (Level level : this.home.getLevels()) {
-      if (level.isViewable()) {
-        levels.add(level);
-      }
-    }
-
-    if (planPage < 0 || planPage >= levels.size()) {
-      return NO_SUCH_PAGE;
-    }
-
-    Level previousLevel = this.home.getSelectedLevel();
-    List<Selectable> previousSelection =
-            new ArrayList<Selectable>(this.home.getSelectedItems());
-
-    try {
-      this.home.setSelectedLevel(levels.get(planPage));
-      return planView.print(g2D, pageFormat, 0);
-    } finally {
-      this.home.setSelectedLevel(previousLevel);
-      this.home.setSelectedItems(previousSelection);
-    }
+    return planView.print(g2D, pageFormat, planPage);
   }
-
 }
