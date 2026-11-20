@@ -2022,7 +2022,6 @@ public class PlanComponent extends JComponent implements PlanView, Scrollable, P
       int pagesPerRow;
       int pagesPerColumn;
       if (this.home.getPrint() == null || this.home.getPrint().getPlanScale() == null) {
-        // Compute a scale that ensures the plan will fill the component if plan scale is null
         printScale = getPrintPreferredScale(g, pageFormat) * LengthUnit.centimeterToInch(72);
         if (pageIndex > 0) {
           return NO_SUCH_PAGE;
@@ -2032,7 +2031,6 @@ public class PlanComponent extends JComponent implements PlanView, Scrollable, P
         rowIndex   = 0;
         columnIndex = 0;
       } else {
-        // Apply print scale to paper size expressed in 1/72nds of an inch
         printScale = this.home.getPrint().getPlanScale().floatValue() * LengthUnit.centimeterToInch(72);
         pagesPerRow = (int)(printedItemBounds.getWidth() * printScale / imageableWidth);
         if (printedItemBounds.getWidth() * printScale != imageableWidth) {
@@ -2051,23 +2049,19 @@ public class PlanComponent extends JComponent implements PlanView, Scrollable, P
 
       Graphics2D g2D = (Graphics2D)g.create();
       g2D.clip(new Rectangle2D.Double(imageableX, imageableY, imageableWidth, imageableHeight));
-      // Change coordinates system to paper imageable origin
       g2D.translate(imageableX - columnIndex * imageableWidth, imageableY - rowIndex * imageableHeight);
       g2D.scale(printScale, printScale);
       float extraMargin = getStrokeWidthExtraMargin(printedItems, PaintMode.PRINT);
       g2D.translate(-printedItemBounds.getMinX() + extraMargin,
               -printedItemBounds.getMinY() + extraMargin);
-      // Center plan in component if possible
       g2D.translate(Math.max(0,
                       (imageableWidth * pagesPerRow / printScale - printedItemBounds.getWidth() - 2 * extraMargin) / 2),
               Math.max(0,
                       (imageableHeight * pagesPerColumn / printScale - printedItemBounds.getHeight() - 2 * extraMargin) / 2));
       setRenderingHints(g2D);
       try {
-        // Print component contents
         paintContent(g2D, printScale, PaintMode.PRINT);
       } catch (InterruptedIOException ex) {
-        // Ignore exception because it may happen only in EXPORT paint mode
       }
       g2D.dispose();
       return PAGE_EXISTS;
@@ -2097,7 +2091,6 @@ public class PlanComponent extends JComponent implements PlanView, Scrollable, P
     try {
       this.home.setSelectedLevel(viewableLevels.get(pageIndex));
 
-      // Render the selected level using the original printing logic.
       return printCurrentLevel(g, pageFormat, 0);
 
     } finally {
